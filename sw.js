@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rebento-cache-v4';
+const CACHE_NAME = 'rebento-cache-v6';
 const APP_SHELL = [
   './',
   './index.html',
@@ -6,8 +6,12 @@ const APP_SHELL = [
   './manifest.json',
   './manifest.js',
   './assets/css/styles.css',
-  './assets/js/db.js',
+  './assets/js/app.js',
   './assets/js/auth.js',
+  './assets/js/db.js',
+  './assets/js/index.js',
+  './assets/js/modules/UI.js',
+  './assets/js/modules/api.js',
   './assets/images/logo.svg',
   './assets/images/icons/icon-192x192.png',
   './assets/images/icons/icon-512x512.png',
@@ -25,7 +29,9 @@ const APP_SHELL = [
   './pages/js/menu-inicial.js',
   './pages/js/registo.js',
   './pages/js/login.js'
-];
+].map(path => new URL(path, self.registration.scope).href);
+
+const menuUrl = new URL('./pages/menu-inicial.html', self.registration.scope).href;
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -73,7 +79,7 @@ self.addEventListener('fetch', event => {
           const cachedPage = await cache.match(request, { ignoreSearch: true });
           if (cachedPage) return cachedPage;
 
-          const menuPage = await cache.match('./pages/menu-inicial.html');
+          const menuPage = await cache.match(menuUrl);
           if (menuPage) return menuPage;
 
           return new Response('A aplicação está indisponível offline.', {
@@ -86,20 +92,15 @@ self.addEventListener('fetch', event => {
   }
 
   event.respondWith(
-    caches.match(request, { ignoreSearch: true })
-      .then(cachedResponse => {
-        if (cachedResponse) return cachedResponse;
+    caches.open(CACHE_NAME).then(async cache => {
+      const cachedResponse = await cache.match(request, { ignoreSearch: true });
+      if (cachedResponse) return cachedResponse;
 
-        return fetch(request).then(response => {
-          if (!response.ok) return response;
-
-          const copy = response.clone();
-          event.waitUntil(
-            caches.open(CACHE_NAME)
-              .then(cache => cache.put(request, copy))
-          );
-          return response;
-        });
-      })
+      const response = await fetch(request);
+      if (response.ok) {
+        event.waitUntil(cache.put(request, response.clone()));
+      }
+      return response;
+    })
   );
 });
