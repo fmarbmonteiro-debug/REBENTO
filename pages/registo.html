@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rebento | Registo</title>
+    <link rel="manifest" href="../manifest.json" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/registo.css" />
+  </head>
+  <body>
+    <main class="auth-page">
+      <section class="card auth-card">
+        <h1>Criar conta</h1>
+        <p>Começa a organizar o teu armário de plantas.</p>
+
+        <form id="registo-form">
+          <div class="form-grid">
+            <div class="full">
+              <label class="label" for="nome">Nome completo</label>
+              <input id="nome" name="nome" class="input" type="text" placeholder="Ex.: Ana Silva" required />
+            </div>
+
+            <div class="full">
+              <label class="label" for="email">Email</label>
+              <input id="email" name="email" class="input" type="email" placeholder="exemplo@email.com" required />
+            </div>
+
+            <div class="full">
+              <label class="label" for="password">Palavra-passe</label>
+              <input id="password" name="password" class="input" type="password" minlength="6" autocomplete="new-password" placeholder="Mínimo 6 caracteres" required />
+            </div>
+          </div>
+
+          <p id="form-error" class="form-note" role="alert" aria-live="polite"></p>
+          <div class="form-actions">
+            <a href="login.html" class="helper-link">Já tenho conta</a>
+            <button class="btn btn-primary" type="submit">Criar conta</button>
+          </div>
+        </form>
+        <p class="helper-link"><a href="menu-inicial.html">Voltar ao menu inicial</a></p>
+      </section>
+    </main>
+
+    <script src="../manifest.js"></script>
+    <script src="js/main.js"></script>
+    <script type="module" src="js/registo.js"></script>
+  </body>
+</html>
