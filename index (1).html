@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rebento – Armário de plantas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#f3f7ef;--card:#fff;--tx:#1d281d;--mut:#667666;--pri:#2f7d4f;--pt:#fff;--bd:#d9e3d3;--late:#c0392b;--today:#b7791f;--ok:#2f7d4f;--soft:#e8f1e3;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111812;--card:#1a241b;--tx:#e6efe5;--mut:#98a998;--pri:#4fb377;--pt:#08140c;--bd:#2c3a2e;--late:#ff7b6b;--today:#e5b04f;--ok:#5cc785;--soft:#223025;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111812;--card:#1a241b;--tx:#e6efe5;--mut:#98a998;--pri:#4fb377;--pt:#08140c;--bd:#2c3a2e;--late:#ff7b6b;--today:#e5b04f;--ok:#5cc785;--soft:#223025;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:#0d2418;z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--card);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+.logo{font-weight:700;font-size:18px}
+.wrap{max-width:900px;margin:0 auto;padding:16px}
+nav{display:flex;gap:6px;margin-bottom:16px;background:var(--soft);padding:4px;border-radius:12px}
+nav button{flex:1;border:0;background:none;color:var(--mut);padding:9px;border-radius:9px;font:inherit;font-weight:600;cursor:pointer}
+nav button.on{background:var(--card);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.shelf{margin:20px 0 8px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);display:flex;align-items:center;gap:8px}
+.shelf::after{content:"";flex:1;height:2px;background:var(--bd);border-radius:2px}
+.plant .top{display:flex;gap:10px;align-items:center}
+.plant .em{font-size:34px;background:var(--soft);border-radius:12px;width:52px;height:52px;display:grid;place-items:center;flex:none}
+.plant h3{margin:0;font-size:17px}.plant small,.mut{color:var(--mut)}
+.badge{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700;border:1px solid currentColor;margin:10px 0 8px}
+.late{color:var(--late)}.today{color:var(--today)}.ok{color:var(--ok)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+button.b{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 12px;border-radius:10px;font:inherit;font-size:14px;cursor:pointer}
+button.p{background:var(--pri);color:var(--pt);border-color:var(--pri);font-weight:600}
+button.d{color:var(--late)}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+label{display:block;font-size:13px;font-weight:600;margin:12px 0 4px;color:var(--mut)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.stat{text-align:center}.stat b{display:block;font-size:26px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:20;display:grid;place-items:center;padding:16px;overflow:auto}
+.modal .card{width:100%;max-width:460px;max-height:92vh;overflow:auto}
+.leaf{position:absolute;fill:rgba(255,255,255,.05);stroke:rgba(255,255,255,.14);stroke-width:1;transform:rotate(var(--r));pointer-events:none}
+.login{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);min-height:100vh}
+.art{position:relative;overflow:hidden;color:#fff;background:linear-gradient(160deg,#0d2418,#17452d 60%,#0f2c1d)}
+.art .il{position:absolute;inset:0;width:100%;height:100%}
+.art::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(640px 380px at 15% 0%,rgba(183,227,106,.2),transparent 60%),linear-gradient(180deg,rgba(13,36,24,0) 35%,rgba(13,36,24,.82))}
+.artin{position:relative;z-index:2;min-height:100%;display:flex;flex-direction:column;justify-content:space-between;gap:32px;padding:40px clamp(28px,5vw,68px)}
+.brand2{display:flex;align-items:center;gap:12px;font:700 25px "Bricolage Grotesque","Figtree",system-ui,sans-serif;letter-spacing:-.015em}
+.art h1{font-size:clamp(34px,4.2vw,56px);line-height:1.04;margin:0 0 14px;letter-spacing:-.025em;max-width:470px}
+.art .lead{color:rgba(255,255,255,.8);font-size:17px;max-width:440px;margin:0 0 28px}
+.pv{max-width:420px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:18px;padding:16px 18px 8px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.pv .bar{background:rgba(255,255,255,.2);margin:10px 0 10px}
+.pv .c-ok{--c:#7be0a0}.pv .c-today{--c:#f2c15c}.pv .c-late{--c:#ff8a7a}
+.pvh{display:flex;justify-content:space-between;font-size:14px}.pvh span{color:rgba(255,255,255,.7)}
+.pvr{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid rgba(255,255,255,.14);font-size:14.5px}
+.pvr .e{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:18px}
+.pvr div{flex:1;line-height:1.25}.pvr small{display:block;color:rgba(255,255,255,.65)}
+.pvr em{font-style:normal;font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.14)}
+.pvr em.l{color:#ff9d8f}.pvr em.t{color:#f6cc73}.pvr em.o{color:#8fe8ae}
+.formside{display:grid;place-items:center;padding:40px 24px}
+.fwrap{width:100%;max-width:400px;animation:rise .6s ease both}
+.fwrap h2{font-size:30px;margin:0 0 6px;line-height:1.1}
+.fwrap .sub{margin:0 0 24px;font-size:16px}
+.fld{margin-bottom:14px}.fld label{margin:0 0 6px;font-size:13.5px;color:var(--tx)}
+.inp{position:relative}
+.inp>svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--mut);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.inp input{height:48px;padding:0 44px 0 42px;border-radius:12px;background:var(--card);font-size:15.5px}
+.eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;width:36px;height:36px;cursor:pointer;display:grid;place-items:center;border-radius:8px}
+.eye svg{width:18px;height:18px;stroke:var(--mut);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.meter{display:flex;gap:4px;margin:9px 0 5px}.meter i{flex:1;height:4px;border-radius:4px;background:var(--bd)}
+.hint{font-size:12.5px;color:var(--mut)}
+.cta{width:100%;height:50px;margin-top:6px;font-size:16px;font-weight:700;border-radius:12px}
+.b.p:hover{filter:brightness(1.08)}
+.err{min-height:0;margin:0}
+.err:not(:empty){background:color-mix(in srgb,var(--late) 12%,transparent);border-radius:10px;padding:10px 12px;margin:0 0 14px}
+.sw{text-align:center;margin:22px 0 0;color:var(--mut)}.sw a{color:var(--pri);font-weight:700;text-decoration:none}
+.fine{display:flex;gap:8px;align-items:flex-start;margin:28px 0 0;padding-top:18px;border-top:1px solid var(--bd);font-size:13px;color:var(--mut)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.fwrap{animation:none}}
+@media (max-width:900px){.login{grid-template-columns:1fr}.art{min-height:250px}.artin{padding:24px 22px 58px;gap:18px}.art .lead,.pv{display:none}.art h1{font-size:30px;margin:0}.brand2{font-size:22px}.formside{background:var(--bg);border-radius:26px 26px 0 0;margin-top:-26px;position:relative;z-index:3;padding:32px 22px 40px;align-items:start}}
+.err{color:var(--late);font-size:14px;min-height:20px;margin-top:8px}
+.av{display:flex;gap:6px;flex-wrap:wrap}.av button{font-size:24px;width:44px;height:44px;border-radius:12px;border:2px solid var(--bd);background:var(--card);cursor:pointer}.av button.on{border-color:var(--pri)}
+.li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--bd)}.li:last-child{border:0}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:99px;z-index:30;display:none;font-size:14px}
+h2{margin:0 0 8px;font-size:19px}
+body{font-family:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15.5px}
+h1,h2,h3,.logo{font-family:"Bricolage Grotesque","Figtree",system-ui,sans-serif;letter-spacing:-.015em}
+button,input,select,textarea{font-family:inherit}
+header{padding:12px max(16px,calc((100% - 900px)/2 + 16px));background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(10px)}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:22px}
+.chip{display:flex;align-items:center;gap:8px;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:5px 14px 5px 5px;border-radius:99px;font-size:14px;font-weight:600;cursor:pointer}
+.chip span{width:28px;height:28px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:16px}
+nav{background:none;border-bottom:1px solid var(--bd);border-radius:0;padding:0;gap:4px;margin-bottom:22px}
+nav button{flex:none;border-radius:0;padding:11px 16px;border-bottom:2px solid transparent;margin-bottom:-1px}
+nav button:hover{color:var(--tx)}
+nav button.on{background:none;box-shadow:none;color:var(--pri);border-bottom-color:var(--pri)}
+.card{border-radius:14px}
+.plant .em{border-radius:50%}
+.badge{border:0;background:color-mix(in srgb,currentColor 13%,transparent)}
+.greet{margin:4px 0 20px}
+.greet h2{font-size:clamp(23px,3.4vw,32px);line-height:1.15;margin:0 0 18px;max-width:640px}
+.bar{display:flex;gap:3px;height:10px;border-radius:99px;overflow:hidden;background:var(--bd)}
+.bar i{display:block;background:var(--c)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;font-size:13.5px;color:var(--mut)}
+.legend span{display:flex;align-items:center;gap:7px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--c);display:inline-block}
+.c-ok{--c:var(--ok)}.c-today{--c:var(--today)}.c-late{--c:var(--late)}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.modal{backdrop-filter:blur(3px)}
+.foot{text-align:center;color:var(--mut);font-size:13px;padding:28px 16px 36px}
+.hero .brand{padding:6px 16px 6px 7px}
+body{background-color:var(--bg);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='%232f7d4f' stroke-opacity='.1' stroke-width='1.2'%3E%3Cpath d='M32 18c15 9 19 26 6 43-15-9-19-26-6-43z'/%3E%3Cpath d='M32 22v36'/%3E%3Cpath d='M112 92c15 9 19 26 6 43-15-9-19-26-6-43z' transform='rotate(35 115 113)'/%3E%3C/g%3E%3C/svg%3E")}
+.band{position:relative;overflow:hidden;color:#fff;padding-bottom:70px;background:radial-gradient(900px 420px at 6% 0%,rgba(79,179,119,.5),transparent 60%),radial-gradient(800px 460px at 100% 100%,rgba(47,125,79,.55),transparent 55%),linear-gradient(145deg,#0d2418,#17452d 55%,#0f2c1d)}
+.band::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.08) 1px,transparent 1px);background-size:26px 26px;-webkit-mask-image:linear-gradient(120deg,#000,transparent 70%);mask-image:linear-gradient(120deg,#000,transparent 70%);pointer-events:none}
+.band header{position:relative;top:auto;z-index:2;max-width:900px;margin:0 auto;padding:16px;background:none;border:0;backdrop-filter:none}
+.band .in{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:0 16px}
+.band .logo{color:#fff}
+.band .chip{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.26);color:#fff}
+.band .chip span{background:rgba(255,255,255,.18)}
+.band :focus-visible{outline-color:#b7e36a}
+.band nav{border-bottom:1px solid rgba(255,255,255,.2);margin:4px 0 26px}
+.band nav button{color:rgba(255,255,255,.7)}
+.band nav button:hover{color:#fff}
+.band nav button.on{color:#fff;border-bottom-color:#b7e36a}
+.band .greet{margin:0}
+.band .greet h2{color:#fff;font-size:clamp(24px,3.6vw,36px)}
+.band .greet p{color:rgba(255,255,255,.78);margin:0;font-size:16px}
+.band .bar{background:rgba(255,255,255,.18);height:12px}
+.band .legend{color:rgba(255,255,255,.8)}
+.band .c-ok{--c:#7be0a0}.band .c-today{--c:#f2c15c}.band .c-late{--c:#ff8a7a}
+.wrap{margin-top:-40px;position:relative;z-index:2}
+.card{box-shadow:0 1px 2px rgba(15,40,25,.06),0 14px 32px -20px rgba(15,40,25,.35)}
+.tb{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:10px;margin-bottom:6px;box-shadow:0 14px 32px -20px rgba(15,40,25,.45)}
+.tb input{background:var(--bg)}
+.plant{border-top:3px solid var(--bd)}
+.plant.s-ok{border-top-color:var(--ok)}.plant.s-today{border-top-color:var(--today)}.plant.s-late{border-top-color:var(--late)}
+.foot{background:#0d2418;color:rgba(255,255,255,.6);margin-top:40px}
+.band nav{overflow-x:auto;scrollbar-width:none}.band nav::-webkit-scrollbar{display:none}.band nav button{white-space:nowrap}
+.cap::first-letter{text-transform:uppercase}
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cg small{text-align:center;color:var(--mut);font-weight:600;padding:2px 0 4px}
+.cd{height:62px;border:1px solid var(--bd);background:var(--card);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--tx);cursor:pointer;font:inherit;padding:0}
+.cd.off{border:0;background:none}.cd.tod{border-color:var(--pri);font-weight:700}.cd.sel{background:var(--pri);color:var(--pt);border-color:var(--pri)}
+.cd em{display:flex;gap:3px;height:6px}.dt{width:6px;height:6px;border-radius:50%;display:block}.dt.d{background:var(--ok)}.dt.u{background:var(--today)}.cd.sel .dt{box-shadow:0 0 0 1.5px var(--pt)}
+.cg+.legend{margin-top:14px}
+.mini{display:grid;grid-template-columns:repeat(3,1fr)}.mini div{padding:2px 14px;border-left:1px solid var(--bd)}.mini div:first-child{border:0;padding-left:0}
+.mini b{display:block;font:700 28px "Bricolage Grotesque","Figtree",sans-serif;letter-spacing:-.02em}.mini small{color:var(--mut)}
+.ch{width:100%;height:auto}.ch .bk{fill:var(--pri)}.ch .tv{fill:var(--tx);font-size:11px;font-weight:700}.ch .tl{fill:var(--mut);font-size:9.5px}
+.hb{display:grid;grid-template-columns:minmax(80px,120px) 1fr 24px;align-items:center;gap:10px;margin:10px 0;font-size:14px}
+.hb div{background:var(--soft);border-radius:99px;height:10px;overflow:hidden}.hb i{display:block;height:100%;background:var(--pri);border-radius:99px}.hb b{text-align:right}
+.gd{display:flex;flex-direction:column;gap:12px}.tags{display:flex;gap:6px;flex-wrap:wrap}.tag{font-size:12.5px;background:var(--soft);padding:3px 10px;border-radius:99px}
+.top2{display:flex;gap:12px;align-items:center}.em.big{width:56px;height:56px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-size:32px;flex:none}
+.pd{padding:22px}.pd .top2{margin-bottom:12px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.facts div{background:var(--bg);border-radius:10px;padding:10px 12px}.facts small{display:block;color:var(--mut);font-size:12px}
+.seg{display:flex;background:var(--soft);padding:4px;border-radius:12px;gap:4px}.seg button{flex:1;border:0;background:none;padding:9px;border-radius:9px;font:inherit;font-weight:600;color:var(--mut);cursor:pointer}.seg button.on{background:var(--card);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.plant .top{border-radius:10px}
+button.b{white-space:nowrap}
+@media (max-width:560px){.cd{height:46px;border-radius:8px}.cg{gap:4px}.mini div{padding:2px 8px}.mini b{font-size:22px}.hb{grid-template-columns:90px 1fr 22px}}
+</style>
+</head>
+<body>
+<div id="root"></div><div id="modal"></div><div id="toast"></div>
+<script>
+// ===== Base de dados (localStorage, com fallback em memória) =====
+const mem={};
+const S={get(k){try{const v=localStorage.getItem(k);if(v)return JSON.parse(v)}catch(e){}return mem[k]??null},
+ set(k,v){mem[k]=v;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},
+ del(k){delete mem[k];try{localStorage.removeItem(k)}catch(e){}}};
+let db=S.get('ap_db')||{users:[],plants:[]};
+const save=()=>S.set('ap_db',db);
+let me=db.users.find(u=>u.id===S.get('ap_sess'))||null;
+let tab='shelf',q='',mode='login',authErr='',authKeep='',calSel=null,calM=new Date(new Date().getFullYear(),new Date().getMonth(),1);
+const logoSVG=(s=34)=>`<svg width="${s}" height="${s}" viewBox="0 0 48 48" role="img" aria-label="Rebento"><rect width="48" height="48" rx="14" fill="#1f5c3a"/><path d="M24 39V25" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M24 26C24 17 18 12 10 12c0 9 6 15 14 14Z" fill="#fff"/><path d="M24 29c0-7 4-11 12-11 0 8-4 12-12 11Z" fill="#b7e36a"/></svg>`;
+const leaf=st=>`<svg class="leaf" style="${st}" viewBox="0 0 100 200"><path d="M50 0C92 44 92 124 50 200C8 124 8 44 50 0Z"/><path d="M50 14V190"/></svg>`;
+const LEAVES=leaf('--r:25deg;width:220px;left:-60px;top:-70px')+leaf('--r:140deg;width:300px;right:-80px;top:-100px')+leaf('--r:-30deg;width:150px;right:26%;bottom:-70px');
+const EM=['🌿','🪴','🌵','🌸','🍀','🌻','🌺','🎍','🌱','🍃'];
+const AV=['🧑‍🌾','🌿','🪴','🌵','🌻','🐢','🦋','🐝'];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36);
+async function hash(p,salt){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+// ===== Datas =====
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today=()=>ymd(new Date());
+const dt=s=>new Date(s+'T00:00');
+const addDays=(s,n)=>{const d=dt(s);d.setDate(d.getDate()+n);return ymd(d)};
+const diff=(a,b)=>Math.round((dt(b)-dt(a))/864e5);
+const fmt=s=>dt(s).toLocaleDateString('pt-PT',{day:'numeric',month:'short'});
+function info(p){const next=addDays(p.last,p.interval),d=diff(today(),next);
+ return{next,d,st:d<0?'late':d===0?'today':'ok',txt:d<0?`Em atraso ${-d} d`:d===0?'Regar hoje':`Rega em ${d} d`}}
+const mine=()=>db.plants.filter(p=>p.uid===me.id);
+function toast(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>t.style.display='none',2200)}
+// ===== Vistas =====
+function render(){me?appView():authView()}
+function authView(){
+ const reg=mode==='reg';
+ const ic={m:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg>',u:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>',k:'<svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>'};
+ const EYE='<svg viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
+ const lf=(x,y,r,sc,f,o)=>`<use href="#lf" transform="translate(${x} ${y}) rotate(${r}) scale(${sc})" fill="${f}" fill-opacity="${o}"/>`;
+ const IL=`<svg class="il" viewBox="0 0 800 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><g id="lf"><path d="M0 -100C46 -56 46 24 0 100C-46 24 -46 -56 0 -100Z"/><path d="M0 -88V90" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="1" vector-effect="non-scaling-stroke"/></g></defs>${lf(640,110,150,3,'#4fb377',.16)}${lf(70,90,30,2,'#b7e36a',.14)}${lf(60,560,-40,2.2,'#4fb377',.3)}${lf(710,690,25,2.4,'#4fb377',.45)}${lf(110,790,-20,3.2,'#1f5c3a',.95)}${lf(300,870,15,3.6,'#2f7d4f',.85)}${lf(570,830,-8,3,'#174a2f',.95)}${lf(430,760,40,2,'#4fb377',.3)}</svg>`;
+ const PV=`<div class="pv"><div class="pvh"><b>Hoje no armário</b><span>4 plantas</span></div><div class="bar"><i class="c-ok" style="flex:2"></i><i class="c-today" style="flex:1"></i><i class="c-late" style="flex:1"></i></div>
+ <div class="pvr"><span class="e">🌿</span><div><b>Costela-de-adão</b><small>Prateleira 1</small></div><em class="l">Em atraso 2 d</em></div>
+ <div class="pvr"><span class="e">🪴</span><div><b>Jiboia</b><small>Prateleira 2</small></div><em class="t">Regar hoje</em></div>
+ <div class="pvr"><span class="e">🌵</span><div><b>Cato</b><small>Prateleira 1</small></div><em class="o">Rega em 9 d</em></div></div>`;
+ const fld=(id,l,i,inp)=>`<div class="fld"><label for="${id}">${l}</label><div class="inp">${ic[i]}${inp}</div></div>`;
+ $('#root').innerHTML=`<div class="login"><section class="art">${IL}<div class="artin"><div class="brand2">${logoSVG(40)}<span>Rebento</span></div><div><h1>Cada planta no seu tempo.</h1><p class="lead">Organiza o teu armário, acompanha as regas e cuida de tudo num só lugar.</p>${PV}</div></div></section>
+ <section class="formside"><div class="fwrap"><h2>${reg?'Criar conta':'Bem-vindo de volta'}</h2><p class="mut sub">${reg?'Começa a gerir o teu armário em segundos.':'Entra para ver o teu armário de plantas.'}</p>
+ <form id="af">${reg?fld('an','Nome','u','<input id="an" autocomplete="name" placeholder="O teu nome" required>'):''}
+ ${fld('ae','Email','m',`<input id="ae" type="email" autocomplete="email" placeholder="nome@exemplo.pt" value="${esc(authKeep)}" required>`)}
+ ${fld('ap','Palavra-passe','k',`<input id="ap" type="password" autocomplete="${reg?'new-password':'current-password'}" placeholder="${reg?'Mínimo de 6 caracteres':'A tua palavra-passe'}" required><button type="button" class="eye" data-a="eye" aria-label="Mostrar palavra-passe">${EYE}</button>`)}
+ ${reg?'<div class="meter"><i></i><i></i><i></i><i></i></div><div class="hint" id="pl">Mínimo de 6 caracteres</div>':''}
+ <div class="err" role="alert" style="margin-top:12px">${esc(authErr)}</div>
+ <button class="b p cta">${reg?'Criar conta':'Entrar'}</button></form>
+ <p class="sw">${reg?'Já tens conta?':'Ainda não tens conta?'} <a href="#" data-a="sw">${reg?'Entrar':'Criar conta'}</a></p>
+ <p class="fine"><span>🔒</span><span>As palavras-passe são protegidas com hash SHA-256 e os teus dados ficam guardados neste dispositivo.</span></p></div></section></div>`;
+ if(reg){const pw=$('#ap'),bars=document.querySelectorAll('.meter i'),lb=$('#pl');pw.oninput=()=>{const v=pw.value;let n=0;if(v.length>=6)n++;if(v.length>=10)n++;if(/[a-z]/.test(v)&&/[A-Z]/.test(v)&&/\d/.test(v))n++;if(/[^A-Za-z0-9]/.test(v)&&v.length>=8)n++;bars.forEach((b,i)=>b.style.background=i<n?['#c0392b','#b7791f','#4fb377','#2f7d4f'][n-1]:'');lb.textContent=v?['Fraca','Razoável','Boa','Forte'][Math.max(n-1,0)]:'Mínimo de 6 caracteres'}}
+ $('#af').onsubmit=async e=>{e.preventDefault();authErr='';
+  const email=$('#ae').value.trim().toLowerCase(),pw=$('#ap').value;
+  try{
+  if(reg){const name=$('#an').value.trim();
+   if(pw.length<6)authErr='A palavra-passe precisa de pelo menos 6 caracteres.';
+   else if(db.users.some(u=>u.email===email))authErr='Já existe uma conta com este email.';
+   else{const salt=uid();me={id:uid(),name,email,salt,hash:await hash(pw,salt),avatar:'🧑‍🌾',created:today()};db.users.push(me);save()}
+  }else{const u=db.users.find(u=>u.email===email);
+   if(!u||u.hash!==await hash(pw,u.salt))authErr='Email ou palavra-passe incorretos.';else me=u}
+  }catch(err){authErr='Não foi possível processar o pedido neste navegador.'}
+  if(authErr){me=null;authKeep=email;return authView()}
+  S.set('ap_sess',me.id);tab='shelf';render()};
+}
+const SP=[['Costela-de-adão','Monstera deliciosa','🌿','Luz indireta',7,'Gosta de humidade e de folhas limpas. Rega quando os 3 cm de cima do substrato estiverem secos.'],
+['Jiboia','Epipremnum aureum','🪴','Sombra',7,'Muito resistente e tolera pouca luz. Evita encharcar o vaso.'],
+['Cato','Echinopsis','🌵','Sol direto',14,'Precisa de muito sol e pouca água. No inverno, rega ainda menos.'],
+['Orquídea','Phalaenopsis','🌸','Luz indireta',8,'Rega por imersão das raízes e deixa escorrer bem. Nunca deixes água na coroa.'],
+['Aloé vera','Aloe vera','🌱','Sol direto',14,'Suculenta: deixa o substrato secar por completo entre regas.'],
+['Espada-de-são-jorge','Sansevieria','🍃','Sombra',14,'Quase indestrutível. O excesso de água é o maior perigo.'],
+['Lírio-da-paz','Spathiphyllum','🌼','Luz indireta',5,'Murcha quando tem sede e recupera depressa. Gosta de humidade.'],
+['Manjericão','Ocimum basilicum','🍀','Sol direto',3,'Mantém o solo húmido e colhe as folhas de cima para ramificar.']];
+function calEvents(ps){const m={},add=(d,p,t)=>(m[d]??=[]).push({p,t}),end=addDays(today(),120);
+ ps.forEach(p=>{(p.log||[]).forEach(d=>add(d,p,'done'));let n=addDays(p.last,p.interval);if(n<today())n=today();while(n<=end){add(n,p,'due');n=addDays(n,p.interval)}});return m}
+function calView(ps){
+ const ev=calEvents(ps),y=calM.getFullYear(),mo=calM.getMonth(),first=(calM.getDay()+6)%7,n=new Date(y,mo+1,0).getDate();
+ let cells='';for(let i=0;i<first;i++)cells+='<i class="cd off"></i>';
+ for(let d=1;d<=n;d++){const k=ymd(new Date(y,mo,d)),e=ev[k]||[];
+  cells+=`<button class="cd${k===today()?' tod':''}${k===calSel?' sel':''}" data-a="day" data-id="${k}"><span>${d}</span><em>${e.some(x=>x.t==='done')?'<b class="dt d"></b>':''}${e.some(x=>x.t==='due')?'<b class="dt u"></b>':''}</em></button>`}
+ const sel=calSel||today(),list=ev[sel]||[];
+ return`<div class="card"><div class="row" style="justify-content:space-between;margin-bottom:14px"><button class="b" data-a="cal" data-id="-1" aria-label="Mês anterior">‹</button><h2 class="cap" style="margin:0">${calM.toLocaleDateString('pt-PT',{month:'long',year:'numeric'})}</h2><button class="b" data-a="cal" data-id="1" aria-label="Mês seguinte">›</button></div>
+ <div class="cg">${['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'].map(x=>`<small>${x}</small>`).join('')}${cells}</div>
+ <div class="legend"><span><i class="dot" style="--c:var(--ok)"></i>Rega feita</span><span><i class="dot" style="--c:var(--today)"></i>Rega prevista</span></div></div>
+ <div class="card" style="margin-top:12px"><h2 class="cap">${dt(sel).toLocaleDateString('pt-PT',{weekday:'long',day:'numeric',month:'long'})}</h2>${list.length?list.map(x=>`<div class="li"><span>${x.p.emoji} <b>${esc(x.p.name)}</b> <small class="${x.t==='done'?'ok':'today'}">${x.t==='done'?'Regada':'Prevista'}</small></span>${x.t==='due'&&sel===today()?`<button class="b p" data-a="water" data-id="${x.p.id}">💧 Regar</button>`:''}</div>`).join(''):'<p class="mut">Sem regas neste dia.</p>'}</div>`}
+function statsView(ps){
+ if(!ps.length)return'<div class="card" style="text-align:center"><p style="font-size:40px;margin:0">📊</p><p class="mut">Regista plantas e rega-as para veres aqui as estatísticas.</p></div>';
+ const T=today(),all=ps.flatMap(p=>(p.log||[]).map(d=>({d,p}))),c={ok:0,today:0,late:0};ps.forEach(p=>c[info(p).st]++);
+ const wk=[...Array(8)].map((_,i)=>{const e=addDays(T,-7*(7-i)),st=addDays(e,-6);return{l:fmt(st),n:all.filter(x=>x.d>=st&&x.d<=e).length}}),mx=Math.max(1,...wk.map(x=>x.n));
+ let g=0,ok=0;ps.forEach(p=>{const l=[...(p.log||[])].sort();for(let i=1;i<l.length;i++){g++;if(diff(l[i-1],l[i])<=p.interval+1)ok++}});
+ const bars=wk.map((x,i)=>{const h=Math.round(x.n/mx*100),X=14+i*46;return`<rect class="bk" x="${X}" y="${128-h}" width="30" height="${h}" rx="6" opacity="${i===7?1:.5}"/><text class="tv" x="${X+15}" y="${122-h}" text-anchor="middle">${x.n||''}</text><text class="tl" x="${X+15}" y="146" text-anchor="middle">${x.l}</text>`}).join('');
+ const by={};ps.forEach(p=>{const k=p.shelf||'Sem prateleira';by[k]=(by[k]||0)+1});const mxs=Math.max(...Object.values(by));
+ const L=[['ok','em dia'],['today','para hoje'],['late','em atraso']];
+ return`<div class="card"><div class="mini"><div><b>${ps.length}</b><small>Plantas</small></div><div><b>${all.length}</b><small>Regas registadas</small></div><div><b>${g?Math.round(ok/g*100)+'%':'—'}</b><small>Regas a tempo</small></div></div></div>
+ <div class="card" style="margin-top:12px"><h2>Regas por semana</h2><p class="mut" style="margin:0 0 6px;font-size:14px">Últimas 8 semanas, a data indica o início de cada semana.</p><svg class="ch" viewBox="0 0 380 152" role="img" aria-label="Regas por semana">${bars}</svg></div>
+ <div class="card" style="margin-top:12px"><h2>Estado do armário</h2><div class="bar" style="margin:10px 0">${L.filter(x=>c[x[0]]).map(x=>`<i class="c-${x[0]}" style="flex:${c[x[0]]}"></i>`).join('')}</div><div class="legend">${L.map(x=>`<span><i class="dot c-${x[0]}"></i>${c[x[0]]} ${x[1]}</span>`).join('')}</div></div>
+ <div class="card" style="margin-top:12px"><h2>Plantas por prateleira</h2>${Object.keys(by).sort().map(k=>`<div class="hb"><span>${esc(k)}</span><div><i style="width:${by[k]/mxs*100}%"></i></div><b>${by[k]}</b></div>`).join('')}</div>`}
+function guideView(){return`<div class="grid">${SP.map((s,i)=>`<div class="card gd"><div class="top2"><div class="em big">${s[2]}</div><div><h3 style="margin:0;font-size:17px">${s[0]}</h3><small class="mut">${s[1]}</small></div></div><div class="tags"><span class="tag">☀️ ${s[3]}</span><span class="tag">💧 a cada ${s[4]} d</span></div><p class="mut" style="margin:0;font-size:14px">${s[5]}</p><button class="b p" data-a="guideAdd" data-id="${i}" style="margin-top:auto">+ Adicionar ao armário</button></div>`).join('')}</div>`}
+function viewPlant(id){const p=db.plants.find(x=>x.id===id),i=info(p),l=[...(p.log||[])].sort(),gp=l.slice(1).map((d,k)=>diff(l[k],d)),avg=gp.length?Math.round(gp.reduce((a,b)=>a+b,0)/gp.length):null;
+ $('#modal').innerHTML=`<div class="modal"><div class="card pd"><div class="top2"><div class="em big">${p.emoji}</div><div><h2 style="margin:0">${esc(p.name)}</h2><small class="mut">${esc(p.species||'—')}</small></div></div><span class="badge ${i.st}" style="margin:0">${i.txt}</span>
+ <div class="facts"><div><small>Prateleira</small><b>${esc(p.shelf||'—')}</b></div><div><small>Luz</small><b>${esc(p.light)}</b></div><div><small>Intervalo de rega</small><b>${p.interval} dias</b></div><div><small>Próxima rega</small><b>${fmt(i.next)}</b></div><div><small>Regas registadas</small><b>${l.length}</b></div><div><small>Intervalo real médio</small><b>${avg?avg+' dias':'—'}</b></div></div>
+ ${p.notes?`<p class="mut" style="margin:0 0 8px">📝 ${esc(p.notes)}</p>`:''}<h3 style="margin:14px 0 2px;font-size:15px">Histórico de regas</h3>${l.slice(-6).reverse().map(d=>`<div class="li"><span>💧 Regada</span><small class="mut">${fmt(d)}</small></div>`).join('')||'<p class="mut">Ainda sem regas.</p>'}
+ <div class="row" style="margin-top:16px"><button class="b p" data-a="waterClose" data-id="${p.id}">💧 Regar agora</button><button class="b" data-a="edit" data-id="${p.id}">Editar</button><button class="b" data-a="close" style="margin-left:auto">Fechar</button></div></div></div>`}
+function applyTheme(){const t=S.get('ap_theme'),r=document.documentElement;if(t==='light'||t==='dark')r.dataset.theme=t;else delete r.dataset.theme}
+function appView(){
+ const ps=mine(),due=ps.filter(p=>info(p).d<=0).length;
+ const HD={water:['Plano de rega',due?`${due} ${due===1?'planta pede':'plantas pedem'} água agora.`:'Nada para regar por agora.'],cal:['Calendário','Consulta as regas feitas e as previstas.'],guide:['Guia de espécies','Conselhos de cuidado e atalho para registar plantas.'],stats:['Estatísticas','Percebe como estás a cuidar do armário.'],profile:['O teu perfil','Gere os teus dados e a tua conta.']};
+ const head=tab==='shelf'?greet(ps):`<div class="greet"><h2>${HD[tab][0]}</h2><p>${HD[tab][1]}</p></div>`;
+ $('#root').innerHTML=`<div class="band"><div aria-hidden="true">${LEAVES}</div><header><span class="logo">${logoSVG(32)}Rebento</span><button class="chip" data-a="tab" data-id="profile"><span>${esc(me.avatar)}</span>${esc(me.name.split(' ')[0])}</button></header><div class="in"><nav>${[['shelf','Armário'],['water','Rega'+(due?` (${due})`:'')],['cal','Calendário'],['guide','Guia'],['stats','Estatísticas'],['profile','Perfil']].map(([k,l])=>`<button data-a="tab" data-id="${k}" class="${tab===k?'on':''}">${l}</button>`).join('')}</nav>${head}</div></div><div class="wrap">${({shelf:shelfView,water:waterView,cal:calView,guide:guideView,stats:statsView,profile:profileView}[tab])(ps)}</div><footer class="foot">Rebento – o teu armário de plantas</footer>`;
+ const s=$('#sq');if(s){s.oninput=e=>{q=e.target.value;const pos=q.length;appView();const n=$('#sq');n.focus();n.setSelectionRange(pos,pos)}}
+}
+function greet(ps){const h=new Date().getHours(),g=h<12?'Bom dia':h<20?'Boa tarde':'Boa noite',n=esc(me.name.split(' ')[0]);
+ const c={ok:0,today:0,late:0};ps.forEach(p=>c[info(p).st]++);const due=c.today+c.late;
+ const msg=!ps.length?'Regista a tua primeira planta para começar.':due?(due===1?'Há 1 planta à espera de água.':`Há ${due} plantas à espera de água.`):'Todas as plantas estão regadas.';
+ const L=[['ok','em dia'],['today','para hoje'],['late','em atraso']];
+ return`<div class="greet"><h2>${g}, ${n}. ${msg}</h2>${ps.length?`<div class="bar">${L.filter(x=>c[x[0]]).map(x=>`<i class="c-${x[0]}" style="flex:${c[x[0]]}"></i>`).join('')}</div><div class="legend">${L.map(x=>`<span><i class="dot c-${x[0]}"></i>${c[x[0]]} ${x[1]}</span>`).join('')}</div>`:''}</div>`}
+function card(p){const i=info(p);
+ return`<div class="card plant s-${i.st}"><div class="top" data-a="view" data-id="${p.id}" style="cursor:pointer"><div class="em">${p.emoji}</div><div><h3>${esc(p.name)}</h3><small>${esc(p.species||'—')}</small></div></div>
+ <span class="badge ${i.st}">${i.txt}</span>
+ <div class="mut" style="font-size:13px;margin-bottom:10px">☀️ ${esc(p.light)} · 💧 a cada ${p.interval} d<br>Última rega: ${fmt(p.last)}${p.notes?`<br>📝 ${esc(p.notes)}`:''}</div>
+ <div class="row"><button class="b p" data-a="water" data-id="${p.id}">💧 Regar</button><button class="b" data-a="edit" data-id="${p.id}">Editar</button></div></div>`}
+function shelfView(ps){
+ const f=ps.filter(p=>(p.name+p.species+p.shelf).toLowerCase().includes(q.toLowerCase()));
+ const by={};f.forEach(p=>(by[p.shelf||'Sem prateleira']??=[]).push(p));
+ return`<div class="row tb"><input id="sq" placeholder="Pesquisar plantas…" value="${esc(q)}" style="flex:1;min-width:140px"><button class="b p" data-a="new">+ Registar planta</button></div>
+ ${!ps.length?'<div class="card" style="text-align:center;margin-top:16px"><p style="font-size:40px;margin:0">🌱</p><p class="mut">O teu armário está vazio. Regista a primeira planta!</p></div>':''}
+ ${Object.keys(by).sort().map(k=>`<div class="shelf">${esc(k)}</div><div class="grid">${by[k].map(card).join('')}</div>`).join('')}`}
+function waterView(ps){
+ const s=ps.map(p=>({p,...info(p)})).sort((a,b)=>a.d-b.d);
+ const due=s.filter(x=>x.d<=0),soon=s.filter(x=>x.d>0&&x.d<=7);
+ const hist=ps.flatMap(p=>(p.log||[]).map(d=>({d,n:p.name,e:p.emoji}))).sort((a,b)=>b.d.localeCompare(a.d)).slice(0,10);
+ const li=x=>`<div class="li"><span>${x.p.emoji} <b>${esc(x.p.name)}</b> <small class="${x.st}">${x.txt}</small></span><button class="b ${x.d<=0?'p':''}" data-a="water" data-id="${x.p.id}">💧 Regar</button></div>`;
+ return`<div class="card"><div class="row" style="justify-content:space-between"><h2>Para regar agora</h2>${due.length>1?'<button class="b p" data-a="waterAll">Regar todas</button>':''}</div>
+ ${due.length?due.map(li).join(''):'<p class="mut">Tudo regado. 🎉</p>'}</div>
+ <div class="card" style="margin-top:12px"><h2>Próximos 7 dias</h2>${soon.length?soon.map(x=>`<div class="li"><span>${x.p.emoji} ${esc(x.p.name)}</span><small class="mut">${fmt(x.next)} · em ${x.d} d</small></div>`).join(''):'<p class="mut">Nada agendado.</p>'}</div>
+ <div class="card" style="margin-top:12px"><h2>Histórico recente</h2>${hist.length?hist.map(h=>`<div class="li"><span>${h.e} ${esc(h.n)}</span><small class="mut">${fmt(h.d)}</small></div>`).join(''):'<p class="mut">Ainda sem regas registadas.</p>'}</div>`}
+function profileView(ps){
+ const w=ps.reduce((n,p)=>n+(p.log||[]).length,0);
+ return`<div class="stats"><div class="card stat"><b>${ps.length}</b><small class="mut">Plantas</small></div><div class="card stat"><b>${w}</b><small class="mut">Regas</small></div><div class="card stat"><b>${fmt(me.created)}</b><small class="mut">Membro desde</small></div></div>
+ <div class="card"><h2>Perfil</h2><label>Avatar</label><div class="av">${AV.map(a=>`<button data-a="avatar" data-id="${a}" class="${me.avatar===a?'on':''}">${a}</button>`).join('')}</div>
+ <label>Nome</label><input id="pn" value="${esc(me.name)}"><label>Email</label><input value="${esc(me.email)}" disabled>
+ <div class="row" style="margin-top:12px"><button class="b p" data-a="saveProfile">Guardar perfil</button></div></div>
+ <div class="card" style="margin-top:12px"><h2>Alterar palavra-passe</h2><label>Atual</label><input id="po" type="password" autocomplete="current-password"><label>Nova (mín. 6)</label><input id="pw" type="password" autocomplete="new-password">
+ <div class="row" style="margin-top:12px"><button class="b p" data-a="savePass">Alterar</button></div></div>
+ <div class="card" style="margin-top:12px"><h2>Preferências</h2><label>Aparência</label><div class="seg">${[['auto','Automático'],['light','Claro'],['dark','Escuro']].map(([k,l])=>`<button data-a="theme" data-id="${k}" class="${(S.get('ap_theme')||'auto')===k?'on':''}">${l}</button>`).join('')}</div><div class="row" style="margin-top:14px"><button class="b" data-a="exp">Exportar os meus dados</button></div></div>
+ <div class="card" style="margin-top:12px"><div class="row"><button class="b" data-a="logout">Terminar sessão</button><button class="b d" data-a="delAcc">Eliminar conta</button></div></div>`}
+// ===== Modal de planta =====
+function plantModal(id,pre){
+ const p=id?db.plants.find(x=>x.id===id):{name:'',species:'',shelf:'',light:'Luz indireta',interval:7,last:today(),emoji:'🌿',notes:'',...(pre||{})};
+ const shelves=[...new Set(mine().map(x=>x.shelf).filter(Boolean))];
+ $('#modal').innerHTML=`<div class="modal"><div class="card"><h2>${id?'Editar planta':'Registar planta'}</h2>
+ <label>Ícone</label><div class="av" id="ems">${EM.map(e=>`<button type="button" data-a="pickem" data-id="${e}" class="${p.emoji===e?'on':''}">${e}</button>`).join('')}</div>
+ <label>Nome</label><input id="fn" value="${esc(p.name)}" placeholder="Ex.: Costela-de-adão">
+ <label>Espécie</label><input id="fs" value="${esc(p.species)}" placeholder="Ex.: Monstera deliciosa">
+ <label>Prateleira / localização</label><input id="fh" list="shl" value="${esc(p.shelf)}" placeholder="Ex.: Prateleira 1"><datalist id="shl">${shelves.map(s=>`<option value="${esc(s)}">`).join('')}</datalist>
+ <div class="two"><div><label>Luz</label><select id="fl">${['Sol direto','Luz indireta','Sombra'].map(l=>`<option${l===p.light?' selected':''}>${l}</option>`).join('')}</select></div>
+ <div><label>Regar a cada (dias)</label><input id="fi" type="number" min="1" max="90" value="${p.interval}"></div></div>
+ <label>Última rega</label><input id="fd" type="date" max="${today()}" value="${p.last}">
+ <label>Notas</label><textarea id="fo" rows="2">${esc(p.notes)}</textarea>
+ <div class="err" id="fe"></div>
+ <div class="row" style="margin-top:8px"><button class="b p" data-a="savePlant" data-id="${id||''}">Guardar</button><button class="b" data-a="close">Cancelar</button>${id?`<button class="b d" data-a="delPlant" data-id="${id}" style="margin-left:auto">Eliminar</button>`:''}</div></div></div>`;
+ $('#modal').dataset.em=p.emoji}
+// ===== Ações =====
+const A={
+ view(id){viewPlant(id)},
+ day(id){calSel=id;appView()},
+ cal(id){calM=new Date(calM.getFullYear(),calM.getMonth()+parseInt(id,10),1);appView()},
+ guideAdd(id){const g=SP[+id];plantModal(null,{name:g[0],species:g[1],emoji:g[2],light:g[3],interval:g[4]})},
+ waterClose(id){A.water(id);A.close()},
+ theme(id){S.set('ap_theme',id);applyTheme();appView()},
+ exp(){const d=JSON.stringify({conta:{nome:me.name,email:me.email},plantas:mine()},null,2);$('#modal').innerHTML=`<div class="modal"><div class="card pd"><h2>Exportar dados</h2><p class="mut">Copia o conteúdo abaixo para guardares uma cópia das tuas plantas.</p><textarea id="ex" rows="10" readonly style="font-family:ui-monospace,monospace;font-size:12px">${esc(d)}</textarea><div class="row" style="margin-top:12px"><button class="b p" data-a="copy">Copiar</button><button class="b" data-a="close">Fechar</button></div></div></div>`},
+ copy(){const t=$('#ex');t.select();try{navigator.clipboard.writeText(t.value).then(()=>toast('Copiado'),()=>toast('Seleciona e copia manualmente'))}catch(e){toast('Seleciona e copia manualmente')}},
+ sw(){mode=mode==='reg'?'login':'reg';authErr='';render()},
+ eye(id,t){const i=$('#ap'),sh=i.type==='password';i.type=sh?'text':'password';t.setAttribute('aria-label',sh?'Ocultar palavra-passe':'Mostrar palavra-passe')},
+ tab(id){tab=id;appView()},
+ new(){plantModal()},edit(id){plantModal(id)},close(){$('#modal').innerHTML=''},
+ pickem(id,t){$('#modal').dataset.em=id;document.querySelectorAll('#ems button').forEach(b=>b.classList.toggle('on',b===t))},
+ savePlant(id){const name=$('#fn').value.trim(),iv=parseInt($('#fi').value,10);
+  if(!name)return $('#fe').textContent='Dá um nome à planta.';
+  if(!(iv>=1))return $('#fe').textContent='Indica um intervalo de rega válido.';
+  const d={name,species:$('#fs').value.trim(),shelf:$('#fh').value.trim(),light:$('#fl').value,interval:iv,last:$('#fd').value||today(),notes:$('#fo').value.trim(),emoji:$('#modal').dataset.em||'🌿'};
+  if(id){const p=db.plants.find(x=>x.id===id);Object.assign(p,d)}
+  else db.plants.push({id:uid(),uid:me.id,log:[d.last],created:today(),...d});
+  save();A.close();appView();toast('Planta guardada 🌿')},
+ delPlant(id){if(!confirm('Eliminar esta planta?'))return;db.plants=db.plants.filter(p=>p.id!==id);save();A.close();appView()},
+ water(id){const p=db.plants.find(x=>x.id===id);p.last=today();(p.log??=[]).push(today());save();appView();toast(`💧 ${p.name} regada!`)},
+ waterAll(){mine().filter(p=>info(p).d<=0).forEach(p=>{p.last=today();(p.log??=[]).push(today())});save();appView();toast('Todas as plantas regadas 💧')},
+ avatar(id){me.avatar=id;save();appView()},
+ saveProfile(){const n=$('#pn').value.trim();if(!n)return toast('O nome não pode ficar vazio.');me.name=n;save();appView();toast('Perfil guardado')},
+ async savePass(){const o=$('#po').value,n=$('#pw').value;
+  if(n.length<6)return toast('A nova palavra-passe é demasiado curta.');
+  if(await hash(o,me.salt)!==me.hash)return toast('Palavra-passe atual incorreta.');
+  me.salt=uid();me.hash=await hash(n,me.salt);save();$('#po').value=$('#pw').value='';toast('Palavra-passe alterada')},
+ logout(){S.del('ap_sess');me=null;mode='login';render()},
+ delAcc(){if(!confirm('Eliminar a conta e todas as plantas? Isto não pode ser desfeito.'))return;
+  db.plants=db.plants.filter(p=>p.uid!==me.id);db.users=db.users.filter(u=>u.id!==me.id);save();A.logout()}
+};
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;e.preventDefault();A[t.dataset.a]?.(t.dataset.id,t)});
+applyTheme();render();
+</script>
+</body>
+</html>
